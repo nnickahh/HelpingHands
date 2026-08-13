@@ -1,0 +1,10 @@
+{
+  "description": "This mobile app connects elderly users with verified volunteers for non-emergency assistance, enabling easy request submission and status tracking.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

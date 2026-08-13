@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap');
+@import 'tailwindcss';
+
+* { box-sizing: border-box; }
+
+:root {
+  font-family: 'Nunito', sans-serif;
+  color: #111827;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #ECF1F8;
+}
+
+/* Scrollbar — hidden at rest, shown on hover/scroll */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+*:hover {
+  scrollbar-color: rgba(0,0,0,0.18) transparent;
+}
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.18); border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* Phone inner scroll - never show scrollbar */
+.phone-scroll { scrollbar-width: none; }
+.phone-scroll::-webkit-scrollbar { display: none; }

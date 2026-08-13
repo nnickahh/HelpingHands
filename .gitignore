@@ -1,0 +1,28 @@
+# Command Code and local assistant metadata
+.commandcode/
+**/.claude/
+
+# Dependencies and generated output
+**/node_modules/
+**/.expo/
+**/dist/
+**/build/
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+
+# Native signing and generated folders
+**/ios/
+**/android/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.pem
+
+# OS files
+.DS_Store
+Thumbs.db
