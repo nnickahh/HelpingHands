@@ -4,8 +4,11 @@
 
 # Dependencies and generated output
 **/node_modules/
+**/node_modules.stale/
 **/.expo/
+**/.expo-*/
 **/dist/
+**/dist-*/
 **/build/
 
 # Local environment and credentials
