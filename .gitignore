@@ -29,3 +29,7 @@
 # OS files
 .DS_Store
 Thumbs.db
+
+# Documents and briefs
+*.pdf
+*.docx
