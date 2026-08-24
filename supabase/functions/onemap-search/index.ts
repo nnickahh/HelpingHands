@@ -13,8 +13,8 @@ function json(body: unknown, status = 200) {
 }
 
 async function getOneMapToken(forceRefresh = false) {
-  const email = Deno.env.get("ONEMAP_EMAIL");
-  const password = Deno.env.get("ONEMAP_PASSWORD");
+  const email = Deno.env.get("nnickahh@gmail.com");
+  const password = Deno.env.get("T20060807a@1");
   if (!email || !password) throw new Error("OneMap server credentials are not configured.");
 
   const now = Date.now();

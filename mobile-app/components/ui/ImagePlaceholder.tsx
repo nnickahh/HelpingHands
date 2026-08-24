@@ -15,7 +15,7 @@ export function ImagePlaceholder({ height, label, width = "100%", icon = "badge"
 }
 
 const styles = StyleSheet.create({
-  box: { borderWidth: 1.5, borderColor: colors.borderStrong, borderRadius: 16, alignItems: "center", justifyContent: "center", backgroundColor: colors.sageSoft, padding: 12, gap: 7 },
-  mark: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.white, alignItems: "center", justifyContent: "center" },
+  box: { borderWidth: 1, borderColor: colors.ink, borderRadius: 0, alignItems: "center", justifyContent: "center", backgroundColor: colors.sand, padding: 12, gap: 7 },
+  mark: { width: 48, height: 48, borderWidth: 1, borderColor: colors.borderStrong, backgroundColor: colors.oat, alignItems: "center", justifyContent: "center" },
   label: { color: colors.forestDark, ...typography.small, textAlign: "center", paddingHorizontal: 12 },
 });

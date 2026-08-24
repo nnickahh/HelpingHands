@@ -8,19 +8,83 @@ export const assistanceCategories = [
 ] as const;
 
 export const availableRequests = [
-  { title: "Grocery assistance", details: "Wed, 10:00 AM · Jurong East · 1.2 km", icon: "shopping-basket" as const },
-  { title: "Medicine collection", details: "Thu, 2:30 PM · Clementi · 2.4 km", icon: "local-pharmacy" as const },
-  { title: "Appointment escort", details: "Fri, 9:00 AM · Buona Vista · 3.8 km", icon: "event" as const },
+  {
+    id: "mock-req-1",
+    title: "Grocery assistance",
+    category: "Groceries",
+    details: "Wed, 10:00 AM · Jurong East · 1.2 km",
+    displayDate: "Wed, 26 Aug",
+    displayTime: "10:00 AM",
+    scheduledAt: "2026-08-26T10:00:00+08:00",
+    elderName: "Mdm Maria Lim",
+    elderPhone: "+6581234567",
+    address: {
+      id: "addr-1",
+      label: "Block 134, Jurong East Ave 1, #06-12",
+      postalCode: "600134",
+      latitude: 1.345,
+      longitude: 103.743,
+      area: "Jurong East",
+    },
+    notes: "Uses walking frame. Needs help purchasing groceries at FairPrice and carrying bags to doorstep.",
+    icon: "shopping-basket" as const,
+  },
+  {
+    id: "mock-req-2",
+    title: "Medicine collection",
+    category: "Medicine",
+    details: "Thu, 2:30 PM · Clementi · 2.4 km",
+    displayDate: "Thu, 27 Aug",
+    displayTime: "2:30 PM",
+    scheduledAt: "2026-08-27T14:30:00+08:00",
+    elderName: "Mr Tan Ah Teck",
+    elderPhone: "+6582345678",
+    address: {
+      id: "addr-2",
+      label: "Block 312, Clementi Ave 4, #04-88",
+      postalCode: "120312",
+      latitude: 1.315,
+      longitude: 103.765,
+      area: "Clementi",
+    },
+    notes: "Prescription collection at Clementi Polyclinic. Refill diabetes and high blood pressure medication.",
+    icon: "local-pharmacy" as const,
+  },
+  {
+    id: "mock-req-3",
+    title: "Appointment escort",
+    category: "Appointment",
+    details: "Fri, 9:00 AM · Buona Vista · 3.8 km",
+    displayDate: "Fri, 28 Aug",
+    displayTime: "9:00 AM",
+    scheduledAt: "2026-08-28T09:00:00+08:00",
+    elderName: "Mdm Fatimah",
+    elderPhone: "+6583456789",
+    address: {
+      id: "addr-3",
+      label: "Block 12, Holland Drive, #11-204",
+      postalCode: "271012",
+      latitude: 1.308,
+      longitude: 103.791,
+      area: "Buona Vista",
+    },
+    notes: "Escort needed to NUH Eye Clinic for routine diabetic retinal examination.",
+    icon: "event" as const,
+  },
 ] as const;
 
 export const mockVolunteer = {
   name: "Ben Lim Wei Jie",
   rating: "4.9 · 47 tasks completed",
   task: "Grocery assistance · Wed, 10:00 AM",
+  phone: "+6591234567",
+  whatsapp: "6591234567",
 };
 
 export const mockElder = {
   name: "Mdm Maria Lim",
   details: "72 years · Jurong East",
   mobilityNotes: "Uses walking frame. Please use bags.",
+  phone: "+6581234567",
+  whatsapp: "6581234567",
 };

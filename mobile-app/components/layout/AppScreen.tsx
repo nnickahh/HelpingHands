@@ -25,7 +25,7 @@ export function AppScreen({ children, scroll = true, fill = false, tone = "white
 
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: colors.oat },
-  content: { flexGrow: 1, backgroundColor: colors.white },
+  content: { flexGrow: 1, backgroundColor: colors.oat },
   oat: { backgroundColor: colors.oat },
   fill: { flex: 1 },
 });

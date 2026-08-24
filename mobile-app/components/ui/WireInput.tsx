@@ -25,8 +25,8 @@ export function WireInput({ label, helperText, error, onFocus, onBlur, style, ..
 
 const styles = StyleSheet.create({
   label: { ...typography.label, color: colors.ink, textTransform: "uppercase", marginBottom: 6 },
-  input: { minHeight: 52, borderWidth: 1.5, borderColor: colors.border, borderRadius: 14, paddingHorizontal: 16, color: colors.ink, fontSize: 16, marginBottom: 14, backgroundColor: colors.white },
-  focused: { borderColor: colors.forest, backgroundColor: colors.sageSoft },
+  input: { minHeight: 50, borderWidth: 1, borderColor: colors.borderStrong, borderRadius: 0, paddingHorizontal: 12, color: colors.ink, fontSize: 15, marginBottom: 14, backgroundColor: colors.white },
+  focused: { borderColor: colors.ink, backgroundColor: colors.sageSoft },
   errorInput: { borderColor: colors.coral, backgroundColor: colors.coralSoft },
   helper: { color: colors.gray, ...typography.small, marginTop: -8, marginBottom: 12 },
   errorText: { color: colors.coral, ...typography.small, marginTop: -8, marginBottom: 12 },

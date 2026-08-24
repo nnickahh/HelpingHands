@@ -22,7 +22,7 @@ export function VolunteerCard({ name, rating, onCall, onMessage }: Props) {
 }
 
 const styles = StyleSheet.create({
-  card: { backgroundColor: colors.white, borderWidth: 1, borderColor: colors.border, borderRadius: 18, padding: 16, marginBottom: 14 },
+  card: { backgroundColor: colors.oat, borderWidth: 1, borderColor: colors.ink, borderRadius: 0, padding: 16, marginBottom: 14 },
   person: { flexDirection: "row", gap: 12, alignItems: "center", marginBottom: 16 },
   copy: { flex: 1 },
   name: { ...typography.bodyStrong, color: colors.ink, marginBottom: 5 },
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   rating: { ...typography.small, color: colors.gray },
   badge: { position: "absolute", bottom: 0, right: 0, width: 20, height: 20, borderRadius: 10, backgroundColor: colors.forest, borderWidth: 2, borderColor: colors.white, alignItems: "center", justifyContent: "center" },
   actions: { flexDirection: "row", gap: 10, borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 13 },
-  action: { flex: 1, minHeight: 48, borderWidth: 1.5, borderColor: colors.borderStrong, borderRadius: 13, alignItems: "center", justifyContent: "center", flexDirection: "row", gap: 7 },
+  action: { flex: 1, minHeight: 44, borderWidth: 1, borderColor: colors.borderStrong, borderRadius: 0, alignItems: "center", justifyContent: "center", flexDirection: "row", gap: 7 },
   actionText: { ...typography.bodyStrong, color: colors.forestDark },
   pressed: { backgroundColor: colors.sageSoft },
 });

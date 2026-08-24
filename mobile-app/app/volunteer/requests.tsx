@@ -1,53 +1,161 @@
 import { router } from "expo-router";
-import { useMemo, useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useEffect, useState } from "react";
 import { AppScreen } from "../../components/layout/AppScreen";
 import { BackHeader } from "../../components/layout/BackHeader";
 import { RequestCard } from "../../components/help/RequestCard";
-import { availableRequests } from "../../data/mockData";
+import { WireButton } from "../../components/ui/WireButton";
 import { colors } from "../../theme/colors";
 import { typography } from "../../theme/typography";
-import { Icon } from "../../components/ui/Icon";
+import { useApp } from "../../state/AppProvider";
+import { acceptSharedRequest, listPendingRequests, rejectSharedRequest, type SharedRequest } from "../../services/requests";
 
-const filters = ["All", "Groceries", "Medicine", "Appointments", "Digital help"];
+function getCategoryIcon(cat: string): "shopping-basket" | "local-pharmacy" | "event" | "smartphone" | "inventory-2" | "accessible" {
+  switch (cat?.toLowerCase()) {
+    case "groceries": return "shopping-basket";
+    case "medicine": return "local-pharmacy";
+    case "appointment": return "event";
+    case "digital help": return "smartphone";
+    case "carrying": return "inventory-2";
+    case "accompany": return "accessible";
+    default: return "shopping-basket";
+  }
+}
 
 export default function RequestsScreen() {
-  const [filter, setFilter] = useState("All");
-  const [query, setQuery] = useState("");
-  const requests = useMemo(() => availableRequests.filter((request) => {
-    const matchesQuery = request.title.toLowerCase().includes(query.toLowerCase());
-    const matchesFilter = filter === "All" || request.title.toLowerCase().includes(filter.toLowerCase().replace("appointments", "appointment").replace("digital help", "digital"));
-    return matchesQuery && matchesFilter;
-  }), [filter, query]);
+  const { account, acceptRequest, setRequestDraft, setCategory, setRequestStatus } = useApp();
+  const [requests, setRequests] = useState<SharedRequest[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const token = account.authAccessToken || "mock-access-token";
+
+  const loadRequests = () => {
+    void listPendingRequests(token)
+      .then((loaded) => {
+        setRequests(loaded);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    loadRequests();
+    const timer = setInterval(loadRequests, 3000);
+    return () => clearInterval(timer);
+  }, [token]);
+
+  const handleAccept = (req: SharedRequest) => {
+    const volEmail = account.email || "volunteer@helpinghands.sg";
+    const volName = account.name || "Volunteer";
+    const volPhone = account.phone || "91234567";
+
+    void acceptSharedRequest(token, req.id, { email: volEmail, name: volName, phone: volPhone })
+      .then((accepted) => {
+        if (!accepted) {
+          Alert.alert("Request already taken", "Another volunteer accepted this request first.");
+          loadRequests();
+          return;
+        }
+
+        // Set all relevant details in AppProvider
+        setRequestDraft({
+          sharedRequestId: req.id,
+          scheduledAt: req.scheduled_at,
+          displayDate: req.display_date,
+          displayTime: req.display_time,
+          address: req.address,
+          notes: req.notes,
+        });
+        setCategory(req.category);
+        acceptRequest({ name: volName, phone: volPhone });
+        setRequestStatus("accepted");
+
+        router.push("/volunteer/task");
+      })
+      .catch(() => {
+        Alert.alert("Unable to accept request", "Check your connection and try again.");
+      });
+  };
+
+  const handleDecline = (req: SharedRequest) => {
+    Alert.alert(
+      "Decline request?",
+      `Are you sure you want to decline this ${req.category.toLowerCase()} request from ${req.elder_name}?`,
+      [
+        { text: "Keep", style: "cancel" },
+        {
+          text: "Decline / Reject",
+          style: "destructive",
+          onPress: () => {
+            void rejectSharedRequest(token, req.id);
+            setRequests((prev) => prev.filter((item) => item.id !== req.id));
+            Alert.alert("Task declined", "This request has been removed from your available tasks.");
+          },
+        },
+      ]
+    );
+  };
 
   return (
     <AppScreen tone="oat">
-      <BackHeader title="Available requests" eyebrow="Volunteer home" />
-      <View style={styles.content}>
-        <Text style={styles.heading}>Ways to lend a hand</Text>
-        <Text style={styles.intro}>Requests near you, ready when you are.</Text>
-        <View style={styles.search}><Icon name="search" size={24} color={colors.muted} label="Search" /><TextInput accessibilityLabel="Search requests" value={query} onChangeText={setQuery} placeholder="Search by type or place" placeholderTextColor={colors.muted} style={styles.searchInput} /></View>
-        <View style={styles.filters}>{filters.map((item) => <Pressable key={item} accessibilityRole="button" accessibilityState={{ selected: filter === item }} onPress={() => setFilter(item)} style={[styles.filter, filter === item && styles.selectedFilter]}><Text style={[styles.filterText, filter === item && styles.selectedFilterText]}>{item}</Text></Pressable>)}</View>
-        <Text style={styles.results}>{requests.length} requests available</Text>
-        {requests.length ? requests.map((request) => <RequestCard key={request.title} {...request} onAccept={() => router.push("/volunteer/task")} />) : <View style={styles.empty}><Text style={styles.emptyTitle}>No matching requests</Text><Text style={styles.emptyBody}>Try another category or search term.</Text></View>}
-      </View>
+      <BackHeader title="Available requests" eyebrow="Volunteer portal" />
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        <Text style={styles.heading}>Community assistance requests</Text>
+        <Text style={styles.intro}>
+          Review open requests in your area. Accept a task to coordinate with the elder directly or decline to view others.
+        </Text>
+
+        {requests.length > 0 ? (
+          requests.map((req) => {
+            const formattedDetails = `${req.display_date || "Date TBC"} · ${req.display_time || "Time TBC"} · ${req.address?.area || "Singapore"}`;
+            const badgeLabel = req.is_elder_created ? "⭐ Live Request from Elder" : "Community Request";
+
+            return (
+              <RequestCard
+                key={req.id}
+                icon={getCategoryIcon(req.category)}
+                title={`${req.category} assistance`}
+                elderName={req.elder_name}
+                details={formattedDetails}
+                notes={req.notes}
+                badge={badgeLabel}
+                isElderCreated={Boolean(req.is_elder_created)}
+                onAccept={() => handleAccept(req)}
+                onDecline={() => handleDecline(req)}
+                declineLabel="Decline"
+              />
+            );
+          })
+        ) : (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyTitle}>No open requests right now</Text>
+            <Text style={styles.emptyCopy}>
+              All current tasks have been accepted or completed. New assistance requests from elders will appear here automatically.
+            </Text>
+            <WireButton label="Check for new requests" outline onPress={loadRequests} style={styles.refreshBtn} />
+          </View>
+        )}
+      </ScrollView>
     </AppScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  content: { backgroundColor: colors.oat, padding: 24, flex: 1 },
-  heading: { ...typography.title, color: colors.ink, marginTop: 20 },
-  intro: { ...typography.bodyText, color: colors.gray, marginTop: 6, marginBottom: 20 },
-  search: { minHeight: 54, borderWidth: 1.5, borderColor: colors.border, borderRadius: 14, backgroundColor: colors.white, flexDirection: "row", alignItems: "center", paddingHorizontal: 15, marginBottom: 14 },
-  searchInput: { flex: 1, color: colors.ink, fontSize: 16, marginLeft: 10 },
-  filters: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginBottom: 16 },
-  filter: { minHeight: 38, paddingHorizontal: 14, borderWidth: 1.2, borderColor: colors.border, borderRadius: 12, justifyContent: "center", backgroundColor: colors.white },
-  selectedFilter: { backgroundColor: colors.ink, borderColor: colors.ink },
-  filterText: { color: colors.gray, fontSize: 13, fontWeight: "700" },
-  selectedFilterText: { color: colors.white },
-  results: { ...typography.label, color: colors.muted, textTransform: "uppercase", marginBottom: 10 },
-  empty: { backgroundColor: colors.white, borderRadius: 18, borderWidth: 1, borderColor: colors.border, padding: 24, alignItems: "center" },
-  emptyTitle: { color: colors.ink, ...typography.bodyStrong, marginBottom: 5 },
-  emptyBody: { color: colors.gray, ...typography.small },
+  content: { backgroundColor: colors.oat, padding: 24, paddingBottom: 40 },
+  heading: { ...typography.title, color: colors.ink, marginTop: 12 },
+  intro: { ...typography.bodyText, color: colors.gray, marginTop: 6, marginBottom: 20, lineHeight: 20 },
+  emptyContainer: {
+    borderWidth: 1,
+    borderColor: colors.borderStrong,
+    backgroundColor: colors.white,
+    padding: 20,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  emptyTitle: { ...typography.bodyStrong, color: colors.ink, fontSize: 16, marginBottom: 6 },
+  emptyCopy: { ...typography.bodyText, color: colors.gray, textAlign: "center", marginBottom: 16, lineHeight: 20 },
+  refreshBtn: { minWidth: 200 },
 });

@@ -15,8 +15,8 @@ export function CategoryTile({ icon, label, selected, onPress }: Props) {
 }
 
 const styles = StyleSheet.create({
-  tile: { width: "31.5%", minHeight: 90, borderWidth: 1.5, borderColor: colors.border, borderRadius: 16, alignItems: "center", justifyContent: "center", gap: 8, backgroundColor: colors.white, padding: 8 },
-  selected: { borderColor: colors.forest, backgroundColor: colors.sage },
+  tile: { width: "31.5%", minHeight: 82, borderWidth: 1, borderColor: colors.borderStrong, borderRadius: 0, alignItems: "center", justifyContent: "center", gap: 8, backgroundColor: colors.oat, padding: 8 },
+  selected: { borderColor: colors.ink, backgroundColor: colors.sand },
   pressed: { opacity: 0.78 },
   label: { ...typography.small, color: colors.ink, fontWeight: "700", textAlign: "center" },
   selectedLabel: { color: colors.forestDark },

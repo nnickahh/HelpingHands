@@ -49,10 +49,10 @@ export function DateTimeField({ label, mode, value, onChange, onTimeChange, erro
 
 const styles = StyleSheet.create({
   label: { ...typography.label, color: colors.ink, textTransform: "uppercase", marginBottom: 6 },
-  field: { minHeight: 58, borderWidth: 1.5, borderColor: colors.border, borderRadius: 14, paddingHorizontal: 14, backgroundColor: colors.white, flexDirection: "row", alignItems: "center", gap: 10, marginBottom: 14 },
+  field: { minHeight: 54, borderWidth: 1, borderColor: colors.borderStrong, borderRadius: 0, paddingHorizontal: 12, backgroundColor: colors.oat, flexDirection: "row", alignItems: "center", gap: 10, marginBottom: 14 },
   selectedField: { borderColor: colors.forest, backgroundColor: colors.sageSoft },
   pressed: { opacity: 0.82 },
-  icon: { width: 38, height: 38, borderRadius: 12, backgroundColor: colors.sage, alignItems: "center", justifyContent: "center" },
+  icon: { width: 34, height: 34, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.sand, alignItems: "center", justifyContent: "center" },
   value: { flex: 1, color: colors.ink, ...typography.bodyText },
   placeholder: { color: colors.muted },
   error: { color: colors.coral, ...typography.small, marginTop: -8, marginBottom: 12 },

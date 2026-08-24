@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { AppScreen } from "../../components/layout/AppScreen";
 import { BackHeader } from "../../components/layout/BackHeader";
 import { Divider } from "../../components/ui/Divider";
@@ -8,10 +8,22 @@ import { Steps } from "../../components/ui/Steps";
 import { WireButton } from "../../components/ui/WireButton";
 import { WireInput } from "../../components/ui/WireInput";
 import { Surface } from "../../components/ui/Surface";
+import { useApp } from "../../state/AppProvider";
 import { colors } from "../../theme/colors";
 import { typography } from "../../theme/typography";
 
 export default function VerificationScreen() {
+  const { account, submitIdForReview } = useApp();
+
+  const submitForReview = () => {
+    submitIdForReview();
+    Alert.alert(
+      "Submitted for review",
+      "Your ID check is queued for administrator review. You can check this page again for your verification status.",
+      [{ text: "OK" }],
+    );
+  };
+
   return (
     <AppScreen tone="oat">
       <BackHeader title="Volunteer verification" eyebrow="Before you begin" />
@@ -24,8 +36,8 @@ export default function VerificationScreen() {
         <View style={styles.spacer} />
         <WireInput label="Emergency contact name" placeholder="Full name" />
         <WireInput label="Emergency contact phone" placeholder="Phone number" keyboardType="phone-pad" />
-        <Surface tone="sand" style={styles.pending}><Text style={styles.hourglass}>◷</Text><View style={styles.pendingCopy}><Text style={styles.pendingTitle}>Pending administrator review</Text><Text style={styles.pendingBody}>You’ll see community requests once your account is approved.</Text></View></Surface>
-        <WireButton label="Submit for review" onPress={() => router.push("/volunteer/requests")} />
+        <Surface tone="sand" style={styles.pending}><Text style={styles.hourglass}>{account.isIdVerified ? "✓" : "◷"}</Text><View style={styles.pendingCopy}><Text style={styles.pendingTitle}>{account.isIdVerified ? "Identity approved" : account.isIdSubmitted ? "Pending administrator review" : "Not submitted"}</Text><Text style={styles.pendingBody}>{account.isIdVerified ? "Your account is ready for request matching." : "Submit your ID for review before browsing community requests."}</Text></View></Surface>
+        <WireButton label={account.isIdVerified ? "Continue to requests" : account.isIdSubmitted ? "Check verification status" : "Submit for review"} onPress={account.isIdVerified ? () => router.push("/volunteer/requests") : submitForReview} />
       </View>
     </AppScreen>
   );

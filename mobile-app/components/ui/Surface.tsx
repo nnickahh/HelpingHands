@@ -8,7 +8,7 @@ export function Surface({ tone = "white", style, ...props }: Props) {
 }
 
 const styles = StyleSheet.create({
-  base: { borderRadius: 18, borderWidth: 1, borderColor: colors.border, padding: 16 },
+  base: { borderRadius: 0, borderWidth: 1, borderColor: colors.ink, padding: 16 },
   white: { backgroundColor: colors.white },
   sage: { backgroundColor: colors.sageSoft },
   sand: { backgroundColor: colors.sand },

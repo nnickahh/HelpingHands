@@ -18,7 +18,7 @@ export function BackHeader({ title, eyebrow }: Props) {
 }
 
 const styles = StyleSheet.create({
-  header: { minHeight: 72, backgroundColor: colors.oat, borderBottomWidth: 1, borderBottomColor: colors.border, flexDirection: "row", alignItems: "center", paddingHorizontal: 16, gap: 10 },
+  header: { minHeight: 66, backgroundColor: colors.oat, borderBottomWidth: 1, borderBottomColor: colors.ink, flexDirection: "row", alignItems: "center", paddingHorizontal: 16, gap: 10 },
   back: { width: 44, height: 48, alignItems: "center", justifyContent: "center" },
   eyebrow: { ...typography.label, color: colors.forest, textTransform: "uppercase", marginBottom: 2 },
   title: { color: colors.ink, ...typography.heading },
